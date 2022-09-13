@@ -6,6 +6,7 @@
 
 char **get_text(FILE *text);
 char **devide_text(char *buf, int n_lines);
+void free_ptrs(char **lines);
 
 int main ()
 {
@@ -15,12 +16,17 @@ int main ()
         text   = fopen("input.txt",  "r");
         output = fopen("output.txt", "w");
 
-        if (text == nullptr || output == nullptr)
+        if (text == nullptr)
                 return 1;
+
+        else if (output == nullptr)
+                return 2;
 
         char **lines = get_text(text);
 
         printf("%s\n\n", lines[0]);
+
+        free_ptrs(lines);
 
         fclose(text);
         fclose(output);
@@ -28,16 +34,15 @@ int main ()
 
 char **get_text(FILE *text)
 {
-        struct stat buffer;
-        stat("input.txt", &buffer);
+        struct stat file;
+        stat("input.txt", &file);
         int n_chars = 0;
 
-        char *buf = (char*) calloc((sizeof(buffer.st_size) / sizeof(char)) + 1, sizeof(char));
-        n_chars = fread(buf, sizeof(char), buffer.st_size / sizeof(char), text);
+        char *buf = (char*) calloc(sizeof(file.st_size) + 1, sizeof(char));
+        n_chars = fread(buf, sizeof(char), file.st_size, text);
 
         buf[n_chars] = '\0';
-
-        int n_lines = (buffer.st_size / sizeof(char)) - n_chars;
+        int n_lines = (file.st_size / sizeof(char)) - n_chars;
 
         return devide_text(buf, n_lines);
 }
@@ -51,7 +56,6 @@ char **devide_text(char *buf, int n_lines)
         for (int i = 0; i < n_lines; i++)
         {
                 lines[i] = buf;
-
                 while (*buf != '\n')
                         buf++;
         }
@@ -60,3 +64,10 @@ char **devide_text(char *buf, int n_lines)
 
         return lines;
 }
+
+void free_ptrs(char **lines)
+{
+        free(lines[0]);
+        free(lines);
+}
+
