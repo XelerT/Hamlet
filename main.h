@@ -15,13 +15,15 @@ enum errors
 struct text_t
 {
         size_t n_lines = 0;
+        size_t n_chars = 0;
         char **lines = nullptr;
+        char **rev_lines = nullptr;
         char *buf = nullptr;
 };
 
 void free_ptrs (char **lines, char *buf);
 int err_print (int num);
 
-void print_buf (const char **lines);
+void print_text (text_t *text);
 
 #endif /*MAIN_H*/

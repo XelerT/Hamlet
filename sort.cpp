@@ -10,14 +10,14 @@ int my_strcmp (const char *lhs, const char *rhs)
         assert(lhs);
         assert(rhs);
 
-        while (!isalpha((int) *lhs) && *lhs != '\n')
+        while (!isalpha((int) *lhs) && *lhs != '\0')
                 *lhs++;
-        while (!isalpha((int) *rhs) && *rhs != '\n')
+        while (!isalpha((int) *rhs) && *rhs != '\0')
                 *rhs++;
 
-        while (*(lhs - 1))
-                if (*lhs++ != *rhs++ && *lhs != '\n')
-                        return  (*--lhs - *--rhs);
+        while (*lhs)
+                if (*lhs++ != *rhs++ || *lhs || *rhs)
+                        return  *--lhs - *--rhs;
 
         return 0;
 }
@@ -25,8 +25,9 @@ int my_strcmp (const char *lhs, const char *rhs)
 
 //void qsort( void *ptr, size_t count, size_t size,
 //            int (*comp)(const void *, const void *) );
-void bubble_sort_lines (char **lines)
+void bubble_sort_lines (text_t *text)
 {
+        char **lines = text->lines;
         assert(lines);
         assert(*lines);
 
@@ -39,27 +40,22 @@ void bubble_sort_lines (char **lines)
 
 //void qsort( void *ptr, size_t count, size_t size,
 //            int (*comp)(const void *, const void *) );
-void q_sort_lines (text_t *text, size_t left, size_t right)
+void qsort_lines (char **lines, size_t left, size_t right)
 {
         size_t i = 0;
         size_t last = 0;
-        char **lines = text->lines;
-
-        assert(lines);
 
         if (left >= right)
                 return;
         swap_lines(lines, left, (left + right) / 2);
         last = left;
         for (i = left + 1; i <= right; i++)
-                if (my_strcmp(lines[i], lines[left]) < 0)
+                if (my_strcmp(lines[i], lines[left]))
                         swap_lines(lines, i, ++last);
-
         swap_lines(lines, left, last);
-        q_sort_lines(text, left, last - 1);
-        q_sort_lines(text, last + 1, right);
+        q_sort_lines(lines, left, last - 1);
+        q_sort_lines(lines, last + 1, right);
 }
-
 
 // swap_ptrs (char **line1, char **line2)
 void swap_lines (char **lines, size_t i, size_t j)

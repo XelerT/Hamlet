@@ -6,12 +6,14 @@ int main ()
         FILE *input   = nullptr;
         FILE *output = nullptr;
 
-        input   = fopen("input.txt",  "r");
+        input  = fopen("input.txt",  "r");
         output = fopen("output.txt", "w");
 
         text_t text = {
+                .n_chars = 0,
                 .n_lines = 0,
                 .lines = nullptr,
+                .rev_lines = nullptr,
                 .buf = nullptr
         };
 
@@ -31,22 +33,23 @@ int main ()
 //^       ^         ^
 //|       |         |
 //[p1     p2        p3 p4 p5]
-        //bubble_sort_lines(lines);
+        //bubble_sort_lines(&text);
         assert(text.lines);
         //printf("%s\n\n\n", *text.lines);
-        printf("%s\n\n\n %d\n%s\n", *text.lines, text.n_lines - 1, text.buf);
+        // printf("%s\n\n\n %d\n%s\n", *text.lines, text.n_lines - 1, text.buf);
 
 
-        q_sort_lines(&text, 0, text.n_lines - 1);/*
+        qsort_lines(text.lines, 0, text.n_lines - 1);/*
 
 
-        printf("HERER\n, %d", __LINE__);
+       /* printf("HERER\n, %d", __LINE__);
         print_buf((const char**) text.lines);
 
         // fwrite(*(const char**) lines,  )
         // write_text ((const char**) lines, output, 5564);
 */
-        printf("%s\n\n\n %d", *text.lines, text.n_lines - 1);
+        print_text(&text);
+        // printf("%s\n\n\n %d", *text.lines, text.n_lines - 1);
         free_ptrs(text.lines, text.buf);
 
         fclose(input);
@@ -63,15 +66,15 @@ void free_ptrs (char **lines, char *buf)
         free(lines);
 }
 
-void print_buf (const char **lines)
+void print_text (text_t *text)
 {
+
+        char **lines = text->lines;
+
         assert(lines);
-        assert(*lines);
-        printf("HERE %d\n\n", __LINE__);
+
         while (*lines != nullptr) {
-                for (int i = 0; (*lines)[i] != '\n'; i++)
-                        putchar((*lines)[i]);
-                putchar('\n');
+                printf("%s\n", *lines);
                 lines++;
         }
 }

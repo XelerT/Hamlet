@@ -1,6 +1,6 @@
 #include "process_text.h"
 
-char **get_text (FILE *input, text_t *const text)
+void get_text (FILE *input, text_t *text)
 {
         struct stat file = {};
         stat("input.txt", &file);
@@ -8,29 +8,25 @@ char **get_text (FILE *input, text_t *const text)
         char *buf = (char*) calloc(file.st_size + 1, sizeof(char));
         if (!buf) {
                 printf("Calloc returned NULL.\n");
-                return nullptr;
+                buf = nullptr;
         }
-
 
         assert(buf);
 
-        n_chars = fread(buf, sizeof(char), file.st_size, input);
+        n_chars = fread(buf + 1, sizeof(char), file.st_size, input);
+        text->n_chars = n_chars;
 
-        for (size_t i = 0; i < n_chars; i++)
+        buf[0] = '\0';
+        buf[n_chars] = '\0';
+        for (size_t i = 1; i < n_chars; i++)
                 if (buf[i] == '\n')
                         buf[i] = '\0';
 
-        buf[n_chars] = '\n';
         text->buf = buf;
         size_t n_lines = file.st_size - n_chars;
         n_lines++;
         text->n_lines = n_lines;
-        //printf("%s\n%ld %lld\n %lld", buf, file.st_size, n_chars, text->n_lines);
-        // printf("%s\n\n\n ", text->buf);
-        // printf("%s\n\n\n ", text->lines);
-        // char **qwerty = divide_text(text);
-        // printf("%s\n", *qwerty);
-        return divide_text(text);
+        divide_text(text);
 }
 
 //typedef struct stack
@@ -43,15 +39,15 @@ char **get_text (FILE *input, text_t *const text)
 // qsort(char *elems, size_t size, comp_t comp);
 
 // split_text _t - delete
-char **divide_text (text_t *const text)
+void divide_text (text_t *text)
 {
         char *buf = text->buf;
         assert(buf);
-
+        // printf("\n%lld");
         char **lines = (char**) calloc(text->n_lines + 1, sizeof(char*));
         if (!lines) {
                 printf("Calloc returned NULL.\n");
-                return nullptr;
+                lines = nullptr;
         }
         // check
 
@@ -67,5 +63,4 @@ char **divide_text (text_t *const text)
         assert(*lines);
 
         //printf("%s\n\n\n ", *lines);
-        return lines;
 }
