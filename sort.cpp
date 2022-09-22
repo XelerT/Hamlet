@@ -36,7 +36,7 @@ void bubble_sort_lines (void *ptr, size_t count, size_t size, int (*comp)(const 
                                 swap_lines(lines, i, j);
 }
 
-void rev_bsort_lines (void *ptr, size_t count, size_t size, int (*comp)(const void *, const void *))
+void rev_bsort_lines (void *ptr, size_t count, size_t size, int (*rev_comp)(const void *, const void *))
 {
         assert(ptr);
 

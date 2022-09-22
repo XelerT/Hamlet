@@ -9,6 +9,7 @@
 
 void get_text (FILE *input, text_t *text);
 void divide_text (text_t *text);
-// void write_text (const char **lines, FILE *output, int n_lines);
+void write_text (text_t *text, FILE *output);
+void write_buf (text_t *text, FILE *output);
 
 #endif /*PROCESS_TEXT_H*/

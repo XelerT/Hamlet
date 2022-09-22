@@ -28,38 +28,41 @@ void get_text (FILE *input, text_t *text)
         divide_text(text);
 }
 
-//typedef struct stack
-//{
-//        ...
-// } stack_t;
-
-//typedef int (*)(const void *, const void *) comp_t;
-
-// qsort(char *elems, size_t size, comp_t comp);
-
-// split_text _t - delete
 void divide_text (text_t *text)
 {
         char *buf = text->buf;
         assert(buf);
-        // printf("\n%lld");
-        //char **lines = (char**) calloc(text->n_lines + 1, sizeof(char*));
         struct lines_st *lines = (struct lines_st*) calloc(text->n_lines + 1, sizeof(lines_st));
         if (!lines) {
                 printf("Calloc returned NULL.\n");
                 lines = nullptr;
         }
-        // check
         text->lines = lines;
         for (size_t i = 0; i < text->n_lines; i++) {
                 lines[i].line = buf;
-                //printf("%s\n", lines[i].line);
                 while (*buf != '\n' && *buf != '\0')
                         buf++;
                 buf++;
                 lines[i].length = buf - lines[i].line;
         }
         assert(lines);
+}
 
-        //printf("%s\n\n\n ", *lines);
+void write_text (text_t *text, FILE *output)
+{
+        char n[] = {'\n', '\0'};
+        char *ptr1 = n;
+        for (size_t i = 0; i < text->n_lines; i++){
+                fputs(text->lines[i].line, output);
+                fputs(ptr1, output);
+        }
+}
+
+void write_buf (text_t *text, FILE *output)
+{
+        char *buf = text->buf;
+        for (size_t i = 0; i < text->n_chars; i++)
+                if (buf[i] == '\0')
+                        buf[i] = '\n';
+        fputs(text->buf, output);
 }

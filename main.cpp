@@ -8,7 +8,6 @@ int main ()
         FILE *output = nullptr;
 
         input  = fopen("input.txt",  "r");
-        output = fopen("output.txt", "w");
 
         text_t text = {
                 .n_lines = 0,
@@ -20,18 +19,24 @@ int main ()
         if (input == nullptr)
                 return err_print(EMP_INPUT);
 
-        else if (output == nullptr)
+        get_text(input, &text);
+        assert(text.lines);
+        bubble_sort_lines(text.lines, text.n_lines, sizeof(char), comp);
+        output = fopen("output.txt", "w");
+        if (output == nullptr)
                 return err_print(EMP_OUTPUT);
 
-        get_text(input, &text);
-        rev_bsort_lines(text.lines, text.n_lines, sizeof(char), comp);
-        assert(text.lines);
-        //qsort_lines(text.lines, 0, text.n_lines - 1);
-        /*
-        // fwrite(*(const char**) lines,  )
-        // write_text ((const char**) lines, output, 5564);
-*/
-        print_text(&text);
+        write_text(&text, output);
+        fclose(output);
+
+        rev_bsort_lines(text.lines, text.n_lines, sizeof(char), rev_comp);
+        output = fopen("output.txt", "a");
+
+        if (output == nullptr)
+                return err_print(EMP_OUTPUT);
+
+        write_text(&text, output);
+        write_buf(&text, output);
 
         free_ptrs(text.lines, text.buf);
 
@@ -75,9 +80,3 @@ int err_print (int num)
 
         return num;
 }
-
-// void write_text (const char **lines, FILE *output, int n_lines)
-// {
-//         for (int i = 0; i < n_lines; i++)
-//                 fwrite(lines, output);
-// }
