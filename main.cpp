@@ -31,7 +31,7 @@ int main ()
         // fwrite(*(const char**) lines,  )
         // write_text ((const char**) lines, output, 5564);
 */
-        //print_text(&text);
+        print_text(&text);
 
         free_ptrs(text.lines, text.buf);
 
