@@ -16,7 +16,6 @@ void get_text (FILE *input, text_t *text)
         n_chars = fread(buf + 1, sizeof(char), file.st_size, input);
         text->n_chars = n_chars;
 
-        buf[0] = '\0';
         buf[n_chars] = '\0';
         for (size_t i = 1; i < n_chars; i++)
                 if (buf[i] == '\n')
@@ -44,23 +43,23 @@ void divide_text (text_t *text)
         char *buf = text->buf;
         assert(buf);
         // printf("\n%lld");
-        char **lines = (char**) calloc(text->n_lines + 1, sizeof(char*));
+        //char **lines = (char**) calloc(text->n_lines + 1, sizeof(char*));
+        struct lines_st *lines = (struct lines_st*) calloc(text->n_lines + 1, sizeof(lines_st));
         if (!lines) {
                 printf("Calloc returned NULL.\n");
                 lines = nullptr;
         }
         // check
-
         text->lines = lines;
-        lines[text->n_lines] = nullptr;
         for (size_t i = 0; i < text->n_lines; i++) {
-                lines[i] = buf;
+                lines[i].line = buf;
+                //printf("%s\n", lines[i].line);
                 while (*buf != '\n' && *buf != '\0')
                         buf++;
                 buf++;
+                lines[i].length = buf - lines[i].line;
         }
-
-        assert(*lines);
+        assert(lines);
 
         //printf("%s\n\n\n ", *lines);
 }
