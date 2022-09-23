@@ -2,13 +2,15 @@
 
 void get_text (FILE *input, text_t *text)
 {
+// get_file_size() error?
         struct stat file = {};
         stat("input.txt", &file);
+
         size_t n_chars = 0;
         char *buf = (char*) calloc(file.st_size + 1, sizeof(char));
         if (!buf) {
                 printf("Calloc returned NULL.\n");
-                buf = nullptr;
+                return;
         }
 
         assert(buf);
@@ -16,14 +18,13 @@ void get_text (FILE *input, text_t *text)
         n_chars = fread(buf + 1, sizeof(char), file.st_size, input);
         text->n_chars = n_chars;
 
-        buf[n_chars] = '\0';
-        for (size_t i = 1; i < n_chars; i++)
-                if (buf[i] == '\n')
-                        buf[i] = '\0';
+
+// split_text
+
 
         text->buf = buf;
-        size_t n_lines = file.st_size - n_chars;
-        n_lines++;
+        size_t n_lines = file.st_size - n_chars + 2;
+
         text->n_lines = n_lines;
         divide_text(text);
 }
@@ -32,33 +33,42 @@ void divide_text (text_t *text)
 {
         char *buf = text->buf;
         assert(buf);
-        struct lines_st *lines = (struct lines_st*) calloc(text->n_lines + 1, sizeof(lines_st));
+
+        buf[text->n_chars + 1] = '\0';
+        for (size_t i = 1; i < text->n_chars; i++)
+                if (buf[i] == '\n')
+                        buf[i] = '\0';
+
+        struct line_t *lines = (struct line_t*) calloc(text->n_lines + 1, sizeof(line_t));
         if (!lines) {
                 printf("Calloc returned NULL.\n");
-                lines = nullptr;
+                return;
         }
         text->lines = lines;
         for (size_t i = 0; i < text->n_lines; i++) {
-                lines[i].line = buf;
+                lines[i].ptr = buf;
                 while (*buf != '\n' && *buf != '\0')
                         buf++;
                 buf++;
-                lines[i].length = buf - lines[i].line;
+                lines[i].length = buf - lines[i].ptr;
         }
         assert(lines);
 }
 
-void write_text (text_t *text, FILE *output)
+// '\n'
+void write_text (const text_t *text, FILE *output)
 {
         char n[] = {'\n', '\0'};
         char *ptr1 = n;
         for (size_t i = 0; i < text->n_lines; i++){
-                fputs(text->lines[i].line, output);
+                fputs(text->lines[i].ptr, output);
+                // fputc  '\n'  ???
                 fputs(ptr1, output);
         }
 }
 
-void write_buf (text_t *text, FILE *output)
+// cringe!!! copy or \0 -> \n
+void write_buf (const text_t *text, FILE *output)
 {
         char *buf = text->buf;
         for (size_t i = 0; i < text->n_chars; i++)

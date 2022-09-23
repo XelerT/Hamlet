@@ -1,6 +1,5 @@
 #include "sort.h"
 #include "process_text.h"
-#include "sort.h"
 
 int main ()
 {
@@ -21,15 +20,13 @@ int main ()
 
         get_text(input, &text);
         assert(text.lines);
-        bubble_sort_lines(text.lines, text.n_lines, sizeof(char), comp);
+        bubble_sort_lines(text.lines, text.n_lines, sizeof(line_t), comp_lines);
         output = fopen("output.txt", "w");
         if (output == nullptr)
                 return err_print(EMP_OUTPUT);
-
         write_text(&text, output);
-        fclose(output);
 
-        rev_bsort_lines(text.lines, text.n_lines, sizeof(char), rev_comp);
+        bubble_sort_lines(text.lines, text.n_lines, sizeof(line_t), rev_comp_lines);
         output = fopen("output.txt", "a");
 
         if (output == nullptr)
@@ -44,7 +41,7 @@ int main ()
         fclose(output);
 }
 
-void free_ptrs (lines_st *lines, char *buf)
+void free_ptrs (line_t *lines, char *buf)
 {
         assert(lines);
 
@@ -55,12 +52,12 @@ void free_ptrs (lines_st *lines, char *buf)
 
 void print_text (text_t *text)
 {
-        lines_st *lines = text->lines;
+        line_t *lines = text->lines;
 
         assert(lines);
 
         for (size_t i = 0; i < text->n_lines; i++) {
-                printf("%s\n", lines[i].line);
+                printf("%s\n", lines[i].ptr);
         }
 }
 
