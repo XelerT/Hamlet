@@ -4,7 +4,8 @@ void get_text (FILE *input, text_t *text)
 {
 // get_file_size() error?
         struct stat file = {};
-        stat("input.txt", &file);
+        if (stat("input.txt", &file) < 0)
+                return;
 
         size_t n_chars = 0;
         char *buf = (char*) calloc(file.st_size + 1, sizeof(char));
