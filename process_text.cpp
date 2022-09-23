@@ -18,10 +18,6 @@ void get_text (FILE *input, text_t *text)
         n_chars = fread(buf + 1, sizeof(char), file.st_size, input);
         text->n_chars = n_chars;
 
-
-// split_text
-
-
         text->buf = buf;
         size_t n_lines = file.st_size - n_chars + 2;
 
@@ -55,7 +51,6 @@ void divide_text (text_t *text)
         assert(lines);
 }
 
-// '\n'
 void write_text (const text_t *text, FILE *output)
 {
         char n[] = {'\n', '\0'};
@@ -67,7 +62,6 @@ void write_text (const text_t *text, FILE *output)
         }
 }
 
-// cringe!!! copy or \0 -> \n
 void write_buf (const text_t *text, FILE *output)
 {
         char *buf = text->buf;

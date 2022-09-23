@@ -2,7 +2,7 @@
 
 # Hamlet
 
-This program sort Hamlet. // more info
+This program sort Hamlet, using bubble sort and 2 compare functions, which compare strings from the beginning and the end of lines, ignoring not letter symbols.
 
 ## Install and run
 
