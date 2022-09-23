@@ -1,8 +1,8 @@
-![Question](https://github.com/XelerT/Hamlet/blob/main/Skull.png)
+<img src="https://github.com/XelerT/Hamlet/blob/main/Skull.png" alt="Question" width="200"/>
 
 # Hamlet
 
-This program sort Hamlet.
+This program sort Hamlet. // more info
 
 ## Install and run
 
