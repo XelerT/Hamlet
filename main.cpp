@@ -20,20 +20,20 @@ int main ()
 
         get_text(input, &text);
         assert(text.lines);
-        bubble_sort_lines(text.lines, text.n_lines, sizeof(line_t), comp_lines);
+        bubble_sort(text.lines, text.n_lines, sizeof(line_t), comp_lines);
         output = fopen("output.txt", "w");
         if (output == nullptr)
                 return err_print(EMP_OUTPUT);
         write_text(&text, output);
+        fclose(output);
 
-        bubble_sort_lines(text.lines, text.n_lines, sizeof(line_t), rev_comp_lines);
+        qsort(text.lines, text.n_lines, sizeof(line_t), rev_comp_lines);
         output = fopen("output.txt", "a");
-
         if (output == nullptr)
                 return err_print(EMP_OUTPUT);
 
         write_text(&text, output);
-        write_buf(&text, output);
+        fputs(text.buf, output);
 
         free_ptrs(text.lines, text.buf);
 
@@ -45,7 +45,6 @@ void free_ptrs (line_t *lines, char *buf)
 {
         assert(lines);
 
-// check free
         free(buf);
         free(lines);
 }

@@ -12,6 +12,5 @@ void get_text (FILE *input, text_t *text);
 void divide_text (text_t *text);
 
 void write_text (const text_t *text, FILE *output);
-void write_buf (const text_t *text, FILE *output);
 
 #endif /*PROCESS_TEXT_H*/

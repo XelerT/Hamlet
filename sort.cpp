@@ -5,7 +5,7 @@
 
 #include "sort.h"
 
-void bubble_sort_lines (void *ptr, size_t count, size_t size, int (*comp)(const void *, const void *))
+void bubble_sort (void *ptr, size_t count, size_t size, int (*comp)(const void *, const void *))
 {
         assert(ptr);
 
@@ -28,11 +28,11 @@ int comp_lines (const void *line1, const void *line2)
 
         while (!isalpha((int) *lhs) && *lhs != '\0' && *lhs != '\n')
                 lhs++;
-        while (!isalpha((int) *rhs) && *rhs != '\0' && *lhs != '\n')
+        while (!isalpha((int) *rhs) && *rhs != '\0' && *rhs != '\n')
                 rhs++;
 
         while (*lhs)
-                if (*lhs++ != *rhs++ || *lhs || *rhs)
+                if (*lhs++ != *rhs++ || *lhs == '\n')
                         return  *(--lhs) - *(--rhs);
 
         return 0;
@@ -51,11 +51,11 @@ int rev_comp_lines (const void *line1, const void *line2)
 
         while (!isalpha((int) *lhs) && *lhs != '\0' && *lhs != '\n')
                 lhs--;
-        while (!isalpha((int) *rhs) && *rhs != '\0' && *lhs != '\n')
+        while (!isalpha((int) *rhs) && *rhs != '\0' && *rhs != '\n')
                 rhs--;
 
         while (*lhs)
-                if (*lhs-- != *rhs-- || *lhs || *rhs)
+                if (*lhs-- != *rhs-- || *lhs == '\n')
                         return  *(++lhs) - *(++rhs);
 
         return 0;
